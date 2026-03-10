@@ -1,9 +1,16 @@
 [
-    {
-        "id": 1,
-        "name": "Hung Tran",
-        "email": "hungngtran04@gmail.com",
-        "password": "$2b$10$x5apxJE1koLdufTUmnw5tO1eNVW7rCDz4INcFprJOovrG2eYfdJWa",
-        "createdAt": "2026-03-10T02:37:24.367Z"
-    }
+  {
+    "id": 1,
+    "name": "Hung Tran",
+    "email": "hungngtran04@gmail.com",
+    "password": "$2b$10$x5apxJE1koLdufTUmnw5tO1eNVW7rCDz4INcFprJOovrG2eYfdJWa",
+    "createdAt": "2026-03-10T02:37:24.367Z"
+  },
+  {
+    "id": 2,
+    "name": "Hung",
+    "email": "abc@gmail.com",
+    "password": "$2b$10$OQ73bQoKvBNHY2k3SQHZEeUksXyYmHtaGb5OkchadzatLmX602CZC",
+    "createdAt": "2026-03-10T07:42:05.247Z"
+  }
 ]
