@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "title": "First Blog Post",
+    "content": "This is the content of the first blog post. It contains detailed information about the topic.",
+    "author": "John Doe",
+    "date": "2024-03-01",
+    "category": "Technology",
+    "image": "https://picsum.photos/200"
+  },
+  {
+    "id": 2,
+    "title": "Second Blog Post",
+    "content": "This is the content of the second blog post. It covers different aspects of the subject.",
+    "author": "Jane Smith",
+    "date": "2024-03-05",
+    "category": "Design",
+    "image": "https://picsum.photos/200"
+  },
+  {
+    "id": 3,
+    "title": "Third Blog Post",
+    "content": "This is the content of the third blog post. It provides valuable insights and information.",
+    "author": "Bob Johnson",
+    "date": "2024-03-10",
+    "category": "Development",
+    "image": "https://picsum.photos/200"
+  },
+  {
+    "id": 4,
+    "title": "a",
+    "content": "a",
+    "author": "a",
+    "date": "2026-03-09",
+    "category": "a",
+    "image": "https://picsum.photos/200"
+  },
+  {
+    "id": 5,
+    "title": "Hihi",
+    "content": "123456",
+    "author": "123456",
+    "date": "2026-03-10",
+    "category": "a",
+    "image": "https://picsum.photos/200"
+  },
+  {
+    "id": 6,
+    "title": "a",
+    "content": "a",
+    "author": "aa",
+    "date": "2026-03-10",
+    "category": "aa",
+    "image": "https://picsum.photos/200"
+  }
+]
