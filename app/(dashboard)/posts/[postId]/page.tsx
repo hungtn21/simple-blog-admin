@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { getPostById, getPosts } from '@/lib/postsData';
+import { prisma } from '@/lib/prisma';
 import { ArrowLeft } from 'lucide-react';
 import { Metadata } from 'next';
 
@@ -11,15 +11,19 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  const posts = await getPosts();
-  return posts.map((post) => ({
-    postId: post.id.toString()
+  const posts = await prisma.post.findMany({
+    select: { id: true }
+  });
+  return posts.map((post: { id: string }) => ({
+    postId: post.id
   }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { postId } = await params;
-  const post = await getPostById(parseInt(postId));
+  const post = await prisma.post.findUnique({
+    where: { id: postId }
+  });
 
   if (!post) {
     return {
@@ -59,7 +63,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function PostDetailPage({ params }: PageProps) {
   const { postId } = await params;
   
-  const post = await getPostById(parseInt(postId));
+  const post = await prisma.post.findUnique({
+    where: { id: postId }
+  });
 
   if (!post) {
     notFound();

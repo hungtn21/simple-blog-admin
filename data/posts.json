@@ -52,5 +52,32 @@
     "date": "2026-03-10",
     "category": "aa",
     "image": "https://picsum.photos/200"
+  },
+  {
+    "id": 7,
+    "title": "a",
+    "content": "a",
+    "author": "a",
+    "date": "2026-03-10",
+    "category": "a",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXWtB6QMXZmsx-OsBQprbFyHoLerMfS_bwiw&s"
+  },
+  {
+    "id": 8,
+    "title": "hai con heo",
+    "content": "một con heo",
+    "author": "aaa",
+    "date": "2026-03-10",
+    "category": "a",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXWtB6QMXZmsx-OsBQprbFyHoLerMfS_bwiw&s"
+  },
+  {
+    "id": 9,
+    "title": "aaaa",
+    "content": "a",
+    "author": "a",
+    "date": "2026-03-10",
+    "category": "a",
+    "image": "https://picsum.photos/200"
   }
 ]

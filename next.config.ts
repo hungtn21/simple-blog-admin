@@ -5,7 +5,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'picsum.photos',
+        hostname: '**', // Cho phép tất cả hostnames với HTTPS
+      },
+      {
+        protocol: 'http',
+        hostname: '**', // Cho phép tất cả hostnames với HTTP
       },
     ],
   },

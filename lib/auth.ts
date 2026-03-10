@@ -1,7 +1,7 @@
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
-import { verifyPassword } from './usersData';
+import { verifyPassword } from './auth-helpers';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -27,8 +27,8 @@ export const authOptions: NextAuthOptions = {
         }
 
         return {
-          id: user.id.toString(),
-          name: user.name,
+          id: user.id,
+          name: user.name || '',
           email: user.email,
         };
       },
