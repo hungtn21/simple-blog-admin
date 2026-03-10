@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+import type { Post } from '@/types/prisma';
 
 const isValidImageUrl = (url: string | null | undefined): boolean => {
   if (!url || typeof url !== 'string' || url.trim() === '') return false;
@@ -14,7 +15,7 @@ const isValidImageUrl = (url: string | null | undefined): boolean => {
   }
 };
 
-export default function Postcard({ post }: { post: any }) {
+export default function Postcard({ post }: { post: Post }) {
   const [imageError, setImageError] = useState(false);
   const hasValidImage = isValidImageUrl(post.image);
 

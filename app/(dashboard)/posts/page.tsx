@@ -1,9 +1,24 @@
 import Link from "next/link";
 import Postcard from "@/app/components/Postcard/Postcard";
 import { Plus } from 'lucide-react';
-import { getPosts, Post } from "@/lib/postsData";
+import { prisma } from "@/lib/prisma";
+import { Metadata } from "next";
+import type { Post } from "@/types/prisma";
+
+export const metadata: Metadata = {
+    title: "All Blog Posts",
+    description: "Browse and manage all your blog posts. View, edit, and create new content for your blog.",
+    openGraph: {
+        title: "All Blog Posts | Simple Blog Admin",
+        description: "Browse and manage all your blog posts",
+        type: "website",
+    },
+};
+
 export default async function PostPage() {
-    const posts: Post[] = await getPosts();
+    const posts = await prisma.post.findMany({
+        orderBy: { createdAt: 'desc' }
+    });
     return (
         <div className="max-w-4xl">
             <div className="flex justify-between items-center mb-6">
@@ -17,7 +32,7 @@ export default async function PostPage() {
                 </Link>
             </div>
             <div className="space-y-4">
-                {posts.map(post => (
+                {posts.map((post: Post) => (
                     <Link 
                         key={post.id} 
                         href={`/posts/${post.id}`} 
