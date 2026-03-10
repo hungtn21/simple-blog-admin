@@ -2,6 +2,18 @@ import Link from "next/link";
 import Postcard from "@/app/components/Postcard/Postcard";
 import { Plus } from 'lucide-react';
 import { getPosts, Post } from "@/lib/postsData";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "All Blog Posts",
+    description: "Browse and manage all your blog posts. View, edit, and create new content for your blog.",
+    openGraph: {
+        title: "All Blog Posts | Simple Blog Admin",
+        description: "Browse and manage all your blog posts",
+        type: "website",
+    },
+};
+
 export default async function PostPage() {
     const posts: Post[] = await getPosts();
     return (

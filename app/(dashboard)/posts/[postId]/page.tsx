@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getPostById, getPosts } from '@/lib/postsData';
 import { ArrowLeft } from 'lucide-react';
+import { Metadata } from 'next';
 
 interface PageProps {
   params: Promise<{
@@ -16,6 +17,45 @@ export async function generateStaticParams() {
   }));
 }
 
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { postId } = await params;
+  const post = await getPostById(parseInt(postId));
+
+  if (!post) {
+    return {
+      title: 'Post Not Found',
+    };
+  }
+
+  return {
+    title: post.title,
+    description: post.content.substring(0, 160),
+    authors: [{ name: post.author }],
+    openGraph: {
+      title: post.title,
+      description: post.content.substring(0, 160),
+      type: 'article',
+      publishedTime: post.date,
+      authors: [post.author],
+      images: post.image ? [
+        {
+          url: post.image,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        }
+      ] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.content.substring(0, 160),
+      images: post.image ? [post.image] : [],
+    },
+    keywords: [post.category, 'blog', 'article'],
+  };
+}
+
 export default async function PostDetailPage({ params }: PageProps) {
   const { postId } = await params;
   
@@ -25,8 +65,40 @@ export default async function PostDetailPage({ params }: PageProps) {
     notFound();
   }
 
+  // JSON-LD structured data for SEO
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.content.substring(0, 160),
+    image: post.image || '',
+    datePublished: post.date,
+    dateModified: post.date,
+    author: {
+      '@type': 'Person',
+      name: post.author,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Simple Blog Admin',
+    },
+    articleBody: post.content,
+    articleSection: post.category,
+    keywords: [post.category, 'blog', 'article'],
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://simple-blog-admin.vercel.app/posts/${post.id}`,
+    },
+  };
+
   return (
     <div className="max-w-4xl">
+      {/* JSON-LD structured data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* Back button */}
       <Link
         href="/posts"
