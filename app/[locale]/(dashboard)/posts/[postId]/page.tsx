@@ -5,20 +5,13 @@ import { ArrowLeft } from 'lucide-react';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 
+export const dynamic = 'force-dynamic';
+
 interface PageProps {
   params: Promise<{
     postId: string;
     locale: string;
   }>;
-}
-
-export async function generateStaticParams() {
-  const posts = await prisma.post.findMany({
-    select: { id: true }
-  });
-  return posts.map((post: { id: string }) => ({
-    postId: post.id
-  }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -163,9 +156,6 @@ export default async function PostDetailPage({ params }: PageProps) {
         <div className="prose prose-lg max-w-none">
           <p className="text-gray-700 leading-relaxed">{post.content}</p>
         </div>
-
-        {/* Actions */}
-      
       </article>
     </div>
   );

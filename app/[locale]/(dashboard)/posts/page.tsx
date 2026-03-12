@@ -1,49 +1,35 @@
-import { Link } from "@/i18n/navigation";
-import Postcard from "@/app/components/Postcard/Postcard";
-import { Plus } from 'lucide-react';
-import { prisma } from "@/lib/prisma";
 import { Metadata } from "next";
-import type { Post } from "@/types/prisma";
-import { getTranslations } from "next-intl/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
+import PostsList from "@/app/components/PostsList/PostsList";
 
-export const metadata: Metadata = {
-    title: "All Blog Posts",
-    description: "Browse and manage all your blog posts. View, edit, and create new content for your blog.",
-    openGraph: {
-        title: "All Blog Posts | Simple Blog Admin",
-        description: "Browse and manage all your blog posts",
-        type: "website",
-    },
-};
+export const dynamic = 'force-dynamic';
+
+export async function generateMetadata(): Promise<Metadata> {
+    return {
+        title: "All Blog Posts",
+        description: "Browse and manage all your blog posts. View, edit, and create new content for your blog.",
+        openGraph: {
+            title: "All Blog Posts | Simple Blog Admin",
+            description: "Browse and manage all your blog posts",
+            type: "website",
+        },
+    };
+}
 
 export default async function PostPage() {
-    const t = await getTranslations('posts');
+    const session = await getServerSession(authOptions);
+    
+    if (!session) {
+        redirect('/login');
+    }
+
+    // Fetch posts on the server
     const posts = await prisma.post.findMany({
         orderBy: { createdAt: 'desc' }
     });
-    return (
-        <div className="max-w-4xl">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-4xl font-bold">{t('title')}</h1>
-                <Link 
-                    href="/posts/create"
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                    <Plus size={20} />
-                    {t('create')}
-                </Link>
-            </div>
-            <div className="space-y-4">
-                {posts.map((post: Post) => (
-                    <Link 
-                        key={post.id} 
-                        href={`/posts/${post.id}`} 
-                        className="block bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
-                    >
-                        <Postcard post={post} />
-                    </Link>
-                ))}
-            </div>
-        </div>
-    );  
+
+    return <PostsList posts={posts} />;
 }
