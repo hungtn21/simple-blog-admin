@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     }
     
     try {
-        const { title, content, author, date, category, image } = await request.json();
+        const { title, content, author, date, category, image, published, authorId } = await request.json();
         
         const newPost = await prisma.post.create({
             data: {
@@ -48,6 +48,8 @@ export async function POST(request: Request) {
                 date,
                 category,
                 image,
+                published: published ?? true,
+                authorId: authorId ?? null,
             }
         });
         

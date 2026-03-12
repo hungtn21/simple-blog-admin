@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AuthProvider from "../providers/AuthProvider";
+import ReduxProvider from "../providers/ReduxProvider";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -51,9 +52,11 @@ export default async function LocaleLayout({
 
   return (
     <AuthProvider>
-      <NextIntlClientProvider messages={messages}>
-        {children}
-      </NextIntlClientProvider>
+      <ReduxProvider>
+        <NextIntlClientProvider messages={messages}>
+          {children}
+        </NextIntlClientProvider>
+      </ReduxProvider>
     </AuthProvider>
   );
 }
