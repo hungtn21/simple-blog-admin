@@ -1,11 +1,14 @@
 "use client";
 
 import { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { Link } from '@/i18n/navigation';
+import { useRouter } from '@/i18n/navigation';
+import LanguageSwitcher from '@/app/components/LanguageSwitcher';
+import { useTranslations } from 'next-intl';
 
 export default function RegisterPage() {
   const router = useRouter();
+  const t = useTranslations('register');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -28,12 +31,12 @@ export default function RegisterPage() {
     setError('');
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('passwordMismatch'));
       return;
     }
 
     if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError(t('passwordTooShort'));
       return;
     }
 
@@ -55,27 +58,32 @@ export default function RegisterPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || 'Registration failed');
+        setError(data.error || t('registrationFailed'));
         return;
       }
 
       router.push('/login?registered=true');
     } catch (err) {
-      setError('Registration failed. Please try again.');
+      setError(t('registrationFailed'));
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4 py-12 relative">
+      {/* Language Switcher */}
+      <div className="absolute top-6 right-6">
+        <LanguageSwitcher />
+      </div>
+      
       <div className="max-w-md w-full">
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
-            <p className="text-gray-600">Sign up to get started</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('title')}</h1>
+            <p className="text-gray-600">{t('subtitle')}</p>
           </div>
 
           {/* Error Message */}
@@ -89,7 +97,7 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                Full Name
+                {t('name')}
               </label>
               <input
                 id="name"
@@ -98,14 +106,14 @@ export default function RegisterPage() {
                 value={formData.name}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                placeholder="John Doe"
+                placeholder={t('namePlaceholder')}
                 required
               />
             </div>
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
+                {t('email')}
               </label>
               <input
                 id="email"
@@ -114,14 +122,14 @@ export default function RegisterPage() {
                 value={formData.email}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                placeholder="you@example.com"
+                placeholder={t('emailPlaceholder')}
                 required
               />
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Password
+                {t('password')}
               </label>
               <input
                 id="password"
@@ -130,16 +138,16 @@ export default function RegisterPage() {
                 value={formData.password}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                placeholder="••••••••"
+                placeholder={t('passwordPlaceholder')}
                 required
                 minLength={6}
               />
-              <p className="mt-1 text-xs text-gray-500">Must be at least 6 characters</p>
+              <p className="mt-1 text-xs text-gray-500">{t('passwordMinLength')}</p>
             </div>
 
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
-                Confirm Password
+                {t('confirmPassword')}
               </label>
               <input
                 id="confirmPassword"
@@ -148,7 +156,7 @@ export default function RegisterPage() {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                placeholder="••••••••"
+                placeholder={t('passwordPlaceholder')}
                 required
               />
             </div>
@@ -158,7 +166,7 @@ export default function RegisterPage() {
               disabled={isLoading}
               className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition disabled:bg-gray-400 disabled:cursor-not-allowed font-medium"
             >
-              {isLoading ? 'Creating account...' : 'Create Account'}
+              {isLoading ? t('creatingAccount') : t('createAccount')}
             </button>
           </form>
 
@@ -168,16 +176,16 @@ export default function RegisterPage() {
               <div className="w-full border-t border-gray-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">Or</span>
+              <span className="px-2 bg-white text-gray-500">{t('or')}</span>
             </div>
           </div>
 
           {/* Sign In Link */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Already have an account?{' '}
+              {t('hasAccount')}{' '}
               <Link href="/login" className="font-medium text-blue-600 hover:text-blue-500">
-                Sign in
+                {t('signIn')}
               </Link>
             </p>
           </div>

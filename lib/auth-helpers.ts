@@ -4,7 +4,6 @@ import type { User, UserWithPassword } from '@/types/prisma';
 
 export async function verifyPassword(email: string, password: string): Promise<User | null> {
   try {
-    // Lấy user CÓ password từ database (internal use only)
     const user: UserWithPassword | null = await prisma.user.findUnique({
       where: { email: email.toLowerCase() },
     });
@@ -13,14 +12,12 @@ export async function verifyPassword(email: string, password: string): Promise<U
       return null;
     }
     
-    // Verify password với hash trong database
     const isValid = await bcrypt.compare(password, user.password);
     
     if (!isValid) {
       return null;
     }
     
-    // ✅ Loại bỏ password trước khi return (safe for API)
     const { password: _, ...userWithoutPassword } = user;
     return userWithoutPassword as User;
   } catch (error) {
@@ -49,7 +46,6 @@ export async function createUser(name: string, email: string, password: string):
       },
     });
     
-    // ✅ Loại bỏ password trước khi return
     const { password: _, ...userWithoutPassword } = user;
     return userWithoutPassword as User;
   } catch (error) {
@@ -67,8 +63,7 @@ export async function getUserByEmail(email: string): Promise<User | null> {
     if (!user) {
       return null;
     }
-    
-    // ✅ Loại bỏ password trước khi return
+  
     const { password: _, ...userWithoutPassword } = user;
     return userWithoutPassword as User;
   } catch (error) {
