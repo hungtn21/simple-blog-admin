@@ -1,11 +1,14 @@
 "use client";
 
 import { useState, useEffect, Suspense } from 'react';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
+import LanguageSwitcher from '@/app/components/LanguageSwitcher';
 
 function LoginForm() {
+  const t = useTranslations('login');
   const router = useRouter();
   const searchParams = useSearchParams();
   const [formData, setFormData] = useState({
@@ -18,9 +21,9 @@ function LoginForm() {
 
   useEffect(() => {
     if (searchParams.get('registered') === 'true') {
-      setSuccess('Registration successful! Please login with your credentials.');
+      setSuccess(t('registrationSuccess'));
     }
-  }, [searchParams]);
+  }, [searchParams, t]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -50,21 +53,26 @@ function LoginForm() {
         router.refresh();
       }
     } catch (err) {
-      setError('Login failed. Please try again.');
+      setError(t('loginFailed'));
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4 relative">
+      {/* Language Switcher */}
+      <div className="absolute top-6 right-6">
+        <LanguageSwitcher />
+      </div>
+      
       <div className="max-w-md w-full">
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
-            <p className="text-gray-600">Sign in to your account</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('title')}</h1>
+            <p className="text-gray-600">{t('subtitle')}</p>
           </div>
 
           {/* Error Message */}
@@ -85,7 +93,7 @@ function LoginForm() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
+                {t('email')}
               </label>
               <input
                 id="email"
@@ -94,14 +102,14 @@ function LoginForm() {
                 value={formData.email}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                placeholder="you@example.com"
+                placeholder={t('emailPlaceholder')}
                 required
               />
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Password
+                {t('password')}
               </label>
               <input
                 id="password"
@@ -110,7 +118,7 @@ function LoginForm() {
                 value={formData.password}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                placeholder="••••••••"
+                placeholder={t('passwordPlaceholder')}
                 required
               />
             </div>
@@ -120,7 +128,7 @@ function LoginForm() {
               disabled={isLoading}
               className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition disabled:bg-gray-400 disabled:cursor-not-allowed font-medium"
             >
-              {isLoading ? 'Signing in...' : 'Sign In'}
+              {isLoading ? t('signingIn') : t('signIn')}
             </button>
           </form>
 
@@ -130,7 +138,7 @@ function LoginForm() {
               <div className="w-full border-t border-gray-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">Or</span>
+              <span className="px-2 bg-white text-gray-500">{t('or')}</span>
             </div>
           </div>
 
@@ -162,15 +170,15 @@ function LoginForm() {
                 style={{ fill: '#EA4335' }}
               />
             </svg>
-            Sign in with Google
+            {t('signInWithGoogle')}
           </button>
 
           {/* Sign Up Link */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
+              {t('noAccount')}{' '}
               <Link href="/register" className="font-medium text-blue-600 hover:text-blue-500">
-                Sign up
+                {t('signUp')}
               </Link>
             </p>
           </div>

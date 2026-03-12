@@ -1,9 +1,10 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Postcard from "@/app/components/Postcard/Postcard";
 import { Plus } from 'lucide-react';
 import { prisma } from "@/lib/prisma";
 import { Metadata } from "next";
 import type { Post } from "@/types/prisma";
+import { getTranslations } from "next-intl/server";
 
 export const metadata: Metadata = {
     title: "All Blog Posts",
@@ -16,19 +17,20 @@ export const metadata: Metadata = {
 };
 
 export default async function PostPage() {
+    const t = await getTranslations('posts');
     const posts = await prisma.post.findMany({
         orderBy: { createdAt: 'desc' }
     });
     return (
         <div className="max-w-4xl">
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-4xl font-bold">All Blog Posts</h1>
+                <h1 className="text-4xl font-bold">{t('title')}</h1>
                 <Link 
                     href="/posts/create"
                     className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                 >
                     <Plus size={20} />
-                    Create New Post
+                    {t('create')}
                 </Link>
             </div>
             <div className="space-y-4">

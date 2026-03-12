@@ -1,12 +1,14 @@
 import { notFound } from 'next/navigation';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { prisma } from '@/lib/prisma';
 import { ArrowLeft } from 'lucide-react';
 import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
 interface PageProps {
   params: Promise<{
     postId: string;
+    locale: string;
   }>;
 }
 
@@ -21,13 +23,14 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { postId } = await params;
+  const t = await getTranslations('posts');
   const post = await prisma.post.findUnique({
     where: { id: postId }
   });
 
   if (!post) {
     return {
-      title: 'Post Not Found',
+      title: t('notFound'),
     };
   }
 
@@ -62,6 +65,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function PostDetailPage({ params }: PageProps) {
   const { postId } = await params;
+  const t = await getTranslations('posts');
   
   const post = await prisma.post.findUnique({
     where: { id: postId }
@@ -110,7 +114,7 @@ export default async function PostDetailPage({ params }: PageProps) {
         href="/posts"
         className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6"
       > <ArrowLeft />
-      Back to All Posts
+      {t('backToAllPosts')}
       </Link>
 
       {/* Post content */}
@@ -161,17 +165,7 @@ export default async function PostDetailPage({ params }: PageProps) {
         </div>
 
         {/* Actions */}
-        <footer className="mt-8 pt-6 border-t border-gray-200 flex space-x-4">
-          <Link
-            href={`/posts/${post.id}/edit`}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-          >
-            Edit Post
-          </Link>
-          <button className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors">
-            Delete Post
-          </button>
-        </footer>
+      
       </article>
     </div>
   );

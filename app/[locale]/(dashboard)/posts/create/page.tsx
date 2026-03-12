@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from 'react';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { ArrowLeft } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 
 export default function CreatePostPage() {
+    const t = useTranslations('createPost');
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -44,12 +46,12 @@ export default function CreatePostPage() {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to create post');
+                throw new Error(t('errorCreating'));
             }
 
             router.push('/posts');
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'An error occurred');
+            setError(err instanceof Error ? err.message : t('errorGeneric'));
         } finally {
             setIsSubmitting(false);
         }
@@ -62,10 +64,10 @@ export default function CreatePostPage() {
                 className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 mb-6"
             >
                 <ArrowLeft size={20} />
-                Back to All Posts
+                {t('backToAllPosts')}
             </Link>
 
-            <h1 className="text-4xl font-bold mb-6">Create New Post</h1>
+            <h1 className="text-4xl font-bold mb-6">{t('title')}</h1>
 
             {error && (
                 <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -76,7 +78,7 @@ export default function CreatePostPage() {
             <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6 space-y-6">
                 <div>
                     <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
-                        Title <span className="text-red-500">*</span>
+                        {t('titleLabel')} <span className="text-red-500">{t('required')}</span>
                     </label>
                     <input
                         id="title"
@@ -85,14 +87,14 @@ export default function CreatePostPage() {
                         value={formData.title}
                         onChange={handleChange}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Enter post title"
+                        placeholder={t('titlePlaceholder')}
                         required
                     />
                 </div>
 
                 <div>
                     <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-1">
-                        Content <span className="text-red-500">*</span>
+                        {t('contentLabel')} <span className="text-red-500">{t('required')}</span>
                     </label>
                     <textarea
                         id="content"
@@ -100,7 +102,7 @@ export default function CreatePostPage() {
                         value={formData.content}
                         onChange={handleChange}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Enter post content"
+                        placeholder={t('contentPlaceholder')}
                         rows={10}
                         required
                     />
@@ -108,7 +110,7 @@ export default function CreatePostPage() {
 
                 <div>
                     <label htmlFor="author" className="block text-sm font-medium text-gray-700 mb-1">
-                        Author <span className="text-red-500">*</span>
+                        {t('authorLabel')} <span className="text-red-500">{t('required')}</span>
                     </label>
                     <input
                         id="author"
@@ -117,14 +119,14 @@ export default function CreatePostPage() {
                         value={formData.author}
                         onChange={handleChange}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Enter author name"
+                        placeholder={t('authorPlaceholder')}
                         required
                     />
                 </div>
 
                 <div>
                     <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
-                        Category <span className="text-red-500">*</span>
+                        {t('categoryLabel')} <span className="text-red-500">{t('required')}</span>
                     </label>
                     <input
                         id="category"
@@ -133,14 +135,14 @@ export default function CreatePostPage() {
                         value={formData.category}
                         onChange={handleChange}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Enter post category"
+                        placeholder={t('categoryPlaceholder')}
                         required
                     />
                 </div>
 
                 <div>
                     <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">
-                        Image URL <span className="text-red-500">*</span>
+                        {t('imageLabel')} <span className="text-red-500">{t('required')}</span>
                     </label>
                     <input
                         id="image"
@@ -149,7 +151,7 @@ export default function CreatePostPage() {
                         value={formData.image}
                         onChange={handleChange}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="https://picsum.photos/200"
+                        placeholder={t('imagePlaceholder')}
                         required
                     />
                 </div>
@@ -160,13 +162,13 @@ export default function CreatePostPage() {
                         disabled={isSubmitting}
                         className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
                     >
-                        {isSubmitting ? 'Creating...' : 'Create Post'}
+                        {isSubmitting ? t('creatingButton') : t('createButton')}
                     </button>
                     <Link
                         href="/posts"
                         className="px-6 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors"
                     >
-                        Cancel
+                        {t('cancelButton')}
                     </Link>
                 </div>
             </form>
